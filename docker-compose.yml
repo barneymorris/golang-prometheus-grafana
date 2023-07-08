@@ -1,7 +1,15 @@
----
 version: '3.9'
 services:
-  myapp:
-    build: ./
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
     ports:
       - "3000:3000"
+
+  prometheus:
+    image: prom/prometheus:v2.40.4
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml

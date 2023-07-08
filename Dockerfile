@@ -2,9 +2,16 @@ FROM golang:1.20.4-buster AS build
 
 WORKDIR /app
 
+# download the required Go dependencies
 COPY go.mod ./
 COPY go.sum ./
+RUN go mod download
+#COPY *.go ./
+COPY . ./
 
-COPY main.go ./
+RUN ls
 
-RUN go run main.go
+RUN go build -o app .
+RUN chmod +x app
+
+CMD ["./app"]

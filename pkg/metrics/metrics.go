@@ -15,20 +15,23 @@ type tCustomMetrics struct {
 var customMetrics *tCustomMetrics
 
 func InitCustomMetrics() {
+	reg := prometheus.NewRegistry()
 	customMetrics = &tCustomMetrics{
 		HelloEndpointHitCount: promauto.NewCounter(prometheus.CounterOpts{
-			Namespace: "demo",
-			Subsystem: "http",
-			Name:      "hello_endpoint_hitted",
-			Help:      "The total number of GET /hello endpoint hitted",
+			Name: "hello_endpoint_hitted",
+			Help: "The total number of GET /hello endpoint hitted",
 		}),
 		TotalAmountOfRequest: promauto.NewCounter(prometheus.CounterOpts{
-			Namespace: "demo",
-			Subsystem: "http",
-			Name:      "total_amount_of_request",
-			Help:      "The total amount of all request",
+			Name: "total_amount_of_request",
+			Help: "The total amount of all request",
 		}),
 	}
+
+	reg.MustRegister(
+		customMetrics.HelloEndpointHitCount,
+		customMetrics.TotalAmountOfRequest,
+	)
+
 }
 
 func GetMetrics() *tCustomMetrics {
